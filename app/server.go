@@ -18,9 +18,15 @@ func main() {
 		os.Exit(2)
 	}
 
-	_, err = conn.Write([]byte("+PONG\r\n"))
-	if err != nil {
-		fmt.Println("Error writing response: ", err.Error())
-		os.Exit(3)
+	for {
+		if _, err := conn.Read([]byte{}); err != nil {
+			fmt.Println("Error reading from client: ", err.Error())
+			continue
+		}
+		_, err = conn.Write([]byte("+PONG\r\n"))
+		if err != nil {
+			fmt.Println("Error writing response: ", err.Error())
+			os.Exit(3)
+		}
 	}
 }
